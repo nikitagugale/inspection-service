@@ -29,7 +29,14 @@ Two other cases look similar but have a different cause, floating point (spec 4.
 
 ## Evidence
 
-Instrumented run of `classifyDefect(25.05, 'shaft')`, with a `console.debug` after `lower` is computed that prints the numbers with `toFixed(20)`:
+Instrumented run of `classifyDefect(25.05, 'shaft')`, with a `console.debug` after `lower` is computed:
+
+```
+reading=25.05 upper=25.05 lower=24.95 reading<=upper=true
+pass
+```
+
+The same call with the numbers printed in full (`toFixed(20)`):
 
 ```
 reading=25.05000000000000071054 upper=25.05000000000000071054 lower=24.94999999999999928946 reading<=upper=true
