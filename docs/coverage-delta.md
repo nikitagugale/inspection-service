@@ -29,5 +29,5 @@ of `&&` and each `if`, and the team's tests took only the pass path through most
 
 ## A risk no coverage number could have shown
 
-The old code reached 100% of its lines for a shaft on its limit and still gave the wrong answer. The floating-point error in `19.05 + 0.03` is invisible to coverage: the
-same lines run for 19.08 and for 19.07, and only the specific value shows the bug.
+Even a test run that covered every line of the old `classifyDefect` could still have missed the sleeve bug. The same lines run for 19.08 and for 19.07, so
+coverage looks identical, and only the one value 19.08 shows the floating-point error in `19.05 + 0.03`.

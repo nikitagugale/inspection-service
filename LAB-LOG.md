@@ -8,30 +8,30 @@ may ask to see it, and the capstone will ask for the same kind of evidence.*
 ---
 
 ## Milestone 1 · Baseline the coverage
-- **How I did it** (my brief, or by hand):
+- **How I did it** (my brief, or by hand): Asked Claude Code to run `npm run coverage -- --team` and write `docs/baseline.md` from the output and the spec.
 - **Hints taken** (none / 1 / 2 / 3, and whether early):
 - **Synced?** (yes / no):
-- **The gap I rated highest, and why:**
-- **Noticed** (something that looks wrong, that I did not change):
+- **The gap I rated highest, and why:** The `rework`/`scrap` verdicts (lines 23-26): a wrong answer there scraps good parts or keeps bad ones moving.
+- **Noticed** (something that looks wrong, that I did not change): The `null` check is narrower than spec 4.5, which also requires `recheck` for `undefined` and `NaN`.
 
 ## Milestone 2 · Enumerate the edge cases
-- **How I did it:**
+- **How I did it:** Claude Code wrote `docs/edge-cases.md` (29 rows) from the spec, not from the code.
 - **Hints taken:**
-- **A case I would not have thought of without the specification:**
+- **A case I would not have thought of without the specification:** 0.0004 on a shaft is `scrap`, not `recheck`: spec 4.6 checks the raw reading before the 0.001 rounding. Also, `null` with an unknown part throws (4.7 beats 4.5).
 
 ## Milestone 3 · Generate tests, triage failures
-- **Did I give Claude the specification, the code, or both?**
-- **A test the AI wrote that was wrong, and how I knew:**
+- **Did I give Claude the specification, the code, or both?** Both. The expected answers came from the spec.
+- **A test the AI wrote that was wrong, and how I knew:** None of the 20 tests disagreed with the spec. Claude's triage was wrong, though: it blamed floating point for the spacer upper limit, but `6.35 + 0.07` is exactly `6.42`, so the cause was `<=`. I knew because I ran the numbers in node. (Sleeve upper and spacer lower really are float errors.)
 - **Hints taken:**
 
 ## Milestone 4 · Reproduce and hypothesize
-- **My smallest failing input:**
-- **My hypothesis, in one sentence:**
+- **My smallest failing input:** `classifyDefect(25.05, 'shaft')` gives `pass`, the spec says `rework`. The neighbour `25.06` works.
+- **My hypothesis, in one sentence:** `reading <= upper` on line 20 of `classifyDefect.js` counts the upper limit as a pass, but spec 4.1 says strictly below.
 - **Hints taken:**
 
 ## Milestone 5 · Instrument and confirm
-- **What I logged, and what I expected to see:**
-- **Was my hypothesis right, partly right, or wrong?**
+- **What I logged, and what I expected to see:** `reading`, `upper`, `lower` and `reading <= upper` in `classifyDefect`, for `(25.05, 'shaft')`. I expected `reading` and `upper` to be the same number and the comparison true. I saw `reading=25.05 upper=25.05 lower=24.95 reading<=upper=true`, and the full-precision version showed the same number for both.
+- **Was my hypothesis right, partly right, or wrong?** Right for the shaft and the spacer upper limit (`<=`). Partly right overall: for sleeve 19.08, shim 1.65 and spacer 6.28 the cause is floating-point error, so `<` alone would not fix them. I removed the log before committing.
 - **Hints taken:**
 
 ## Milestone 6 · Fix the cause, red first
