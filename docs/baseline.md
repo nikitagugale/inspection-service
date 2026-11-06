@@ -15,3 +15,5 @@ Measured with `npm run coverage -- --team`.
 | label.js: the `UNKNOWN` label and the `summarise` counting loop | 12-13, 18-25 | The shop-floor screen shows the wrong text or count. Nothing else depends on it. | low |
 
 Coverage cannot see: the branches that are missing from the code altogether (for example the spec's 0.001 mm rounding, `NaN` and impossible readings, and a part exactly on a limit), because a tool can only report lines that exist.
+
+Note: the `null` check (lines 16-17) is narrower than spec 4.5, which also requires `recheck` for `undefined`, `NaN` and non-numbers. That gap is in the code, not in the coverage report.
