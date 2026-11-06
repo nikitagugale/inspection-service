@@ -61,3 +61,11 @@ test('regression: zero, negative, infinite and over-twice-nominal readings mean 
 test('regression: a reading that is positive before rounding is not a sensor fault (spec 4.6)', () => {
   assert.equal(classifyDefect(0.0004, 'shaft'), 'scrap');
 });
+
+test('regression: rounding is to exactly 0.001, on a large part too (spec 4.4)', () => {
+  // 40.01951 is nearer 40.020 (the bore limit) than 40.019, so it is on the limit and reworked.
+  assert.equal(classifyDefect(40.01951, 'bore'), 'rework');
+  assert.equal(classifyDefect(39.98049, 'bore'), 'scrap');
+  assert.equal(classifyDefect(40.01949, 'bore'), 'pass');
+  assert.equal(classifyDefect(39.98051, 'bore'), 'pass');
+});
