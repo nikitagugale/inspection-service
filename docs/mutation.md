@@ -6,7 +6,7 @@ Score: 19 of 20 killed
 
 | Mutant | Verdict | Why |
 |---|---|---|
-| M04 line 19 `\|\| -> &&` | equivalent | Line 19 (`typeof reading !== 'number' \|\| Number.isNaN(reading)`) is made redundant by line 22, which starts `!Number.isFinite(reading)`. `Number.isFinite` does not convert its argument, so it is false for every non-number and for `NaN`, and line 22 returns `recheck` for all of them. I tried `undefined`, `null`, `NaN`, `'25'`, `''`, `{}`, `[]`, `true`, `5n`, a symbol, a function, `new Number(25)`, `0`, `-0`, `25`, `Infinity` and `-Infinity` on both versions and the final answer was the same every time. Line 19 stays because it states spec 4.5 on its own. |
+| M04 line 19 (or -> and) | equivalent | Line 19 (the `typeof` check or `Number.isNaN`) is made redundant by line 22, which starts with `!Number.isFinite(reading)`. `Number.isFinite` does not convert its argument, so it is false for every non-number and for `NaN`, and line 22 returns `recheck` for all of them. I tried `undefined`, `null`, `NaN`, `'25'`, `''`, `{}`, `[]`, `true`, `5n`, a symbol, a function, `new Number(25)`, `0`, `-0`, `25`, `Infinity` and `-Infinity` on both versions and the final answer was the same every time. Line 19 stays because it states spec 4.5 on its own. |
 
 ## Killed by a new test
 
