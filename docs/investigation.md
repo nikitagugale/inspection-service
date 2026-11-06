@@ -21,6 +21,8 @@ upper limit part of the passing range, but spec 4.1 says a pass must be strictly
 
 ## Second input, different part
 
-`classifyDefect(40.02, 'bore')` gives `'pass'` and should be `'rework'`. `classifyDefect(19.08, 'sleeve')` does the same. Both limits equal the reading
-exactly in floating point, so the `<=` is the cause. The spacer lower limit (`6.28`) is different: `6.35 - 0.07` is not exactly `6.28`, so
-that failure has a second cause, floating point, which the `<=` does not explain.
+`classifyDefect(40.02, 'bore')` gives `'pass'` and should be `'rework'`. `40 + 0.02` is exactly `40.02`, so it fails for the same reason: the `<=`.
+
+Two other cases look similar but have a different cause, floating point (spec 4.4):
+- Spacer lower limit: `6.35 - 0.07` is `6.279999999999999`, not `6.28`, so `6.28 > lower` is true and the part passes instead of being scrapped.
+- Sleeve upper limit: `19.05 + 0.03` is `19.080000000000002`, so `19.08` is below `upper` and passes. Changing `<=` to `<` would not fix this.
